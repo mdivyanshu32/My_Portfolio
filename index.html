@@ -4,11 +4,11 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Diviyanshu Mishra — Engineer × CS Developer</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono',monospace;overflow-x:hidden;cursor:none}
+body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono','Courier New',monospace;overflow-x:hidden;cursor:none}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#020617}
 ::-webkit-scrollbar-thumb{background:#22d3ee44;border-radius:2px}
@@ -781,29 +781,45 @@ document.querySelectorAll('button,a,.nav-link,.mobile-link,.contact-item,.chip,.
   el.addEventListener('mouseleave',()=>cursor.style.transform='scale(1)');
 });
 
-/* BOOT */
-const bootLines=[
-  "Loading profile: Diviyanshu Mishra ... OK",
-  "Importing skills: Java, SQL, Power BI ... OK",
-  "Mounting work experience ... OK",
-  "Verifying education records ... OK",
-  "Enabling contact protocols ... OK",
-  ">> SYSTEM READY. PORTFOLIO ONLINE ✓"
-];
-const terminal=document.getElementById('terminal');
-let bi=0;
-function addLine(){
-  if(bi<bootLines.length){
-    const d=document.createElement('div');
-    d.className='boot-line'+(bootLines[bi].startsWith('>>')?' ready':'');
-    d.innerHTML='<span class="prompt">$</span>'+bootLines[bi];
-    terminal.insertBefore(d,terminal.lastElementChild);
-    bi++;setTimeout(addLine,310);
-  } else {
-    setTimeout(()=>{document.getElementById('boot').classList.add('hide');setTimeout(()=>document.getElementById('boot').style.display='none',900)},600);
+/* BOOT — bulletproof, never gets stuck */
+function runBoot(){
+  const bootLines=[
+    "Loading profile: Diviyanshu Mishra ... OK",
+    "Importing skills: Java, SQL, Power BI ... OK",
+    "Mounting work experience ... OK",
+    "Verifying education records ... OK",
+    "Enabling contact protocols ... OK",
+    ">> SYSTEM READY. PORTFOLIO ONLINE ✓"
+  ];
+  const terminal=document.getElementById('terminal');
+  if(!terminal){hideBoot();return;}
+  let bi=0;
+  function addLine(){
+    try{
+      if(bi<bootLines.length){
+        const d=document.createElement('div');
+        d.className='boot-line'+(bootLines[bi].startsWith('>>')?' ready':'');
+        d.innerHTML='<span class="prompt">$</span>'+bootLines[bi];
+        const blink=terminal.querySelector('.cursor-blink');
+        if(blink)terminal.insertBefore(d,blink.parentNode);
+        else terminal.appendChild(d);
+        bi++;setTimeout(addLine,280);
+      }else{setTimeout(hideBoot,500);}
+    }catch(e){hideBoot();}
   }
+  setTimeout(addLine,300);
 }
-setTimeout(addLine,400);
+function hideBoot(){
+  const b=document.getElementById('boot');
+  if(!b)return;
+  b.style.opacity='0';
+  b.style.transition='opacity .7s ease';
+  setTimeout(()=>{b.style.display='none'},750);
+}
+// Run immediately — don't wait for anything
+runBoot();
+// Safety net: if still showing after 5s, force hide
+setTimeout(hideBoot,5000);
 
 /* NAV */
 window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40));
