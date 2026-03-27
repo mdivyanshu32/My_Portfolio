@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>DIVIYANSHU MISHRA — Developer × SOFTWARE Developer</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // ── EMAILJS CONFIG ── Replace with your actual IDs from emailjs.com
+  (function(){
+    emailjs.init({ publicKey: 'YOUR_EMAILJS_PUBLIC_KEY' });
+  })();
+  // Service ID:  'YOUR_SERVICE_ID'   (e.g. 'service_abc123')
+  // Template 1 (contact form): 'YOUR_CONTACT_TEMPLATE_ID'
+  // Template 2 (hire form):    'YOUR_HIRE_TEMPLATE_ID'
+</script>
 <style>
 /* ── RESET & BASE ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -615,6 +626,162 @@ footer{
   .timeline-node{left:-38px;width:34px;height:34px;font-size:.8rem}
   .timeline-line{left:13px}
 }
+
+/* ══════════════════════════════════════════
+   FEATURE ADDITIONS — DO NOT EDIT ABOVE
+   ══════════════════════════════════════════ */
+
+/* ── AVATAR HOVER PHOTO REVEAL ── */
+.avatar-inner{position:relative;width:100%;height:100%}
+.avatar-default{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;
+  transition:opacity .3s ease;
+}
+.avatar-photo{
+  position:absolute;inset:0;
+  background:url('/profile.png') center/cover no-repeat;
+  opacity:0;transition:opacity .3s ease;
+  border-radius:50%;
+}
+.avatar-frame:hover .avatar-default{opacity:0}
+.avatar-frame:hover .avatar-photo{opacity:1}
+.avatar-frame{cursor:pointer}
+
+/* ── HIRE MODAL OVERLAY ── */
+#hireModal{
+  display:none;position:fixed;inset:0;z-index:5000;
+  background:rgba(2,6,23,.88);backdrop-filter:blur(10px);
+  align-items:flex-start;justify-content:center;
+  padding:40px 16px 40px;overflow-y:auto;
+}
+#hireModal.open{display:flex}
+.hire-modal-box{
+  background:linear-gradient(135deg,rgba(15,23,42,.98),rgba(30,27,75,.45));
+  border:1px solid rgba(34,211,238,.22);border-radius:20px;
+  padding:40px;width:100%;max-width:660px;position:relative;
+  box-shadow:0 0 80px rgba(34,211,238,.07),0 0 160px rgba(168,85,247,.04);
+  animation:modalSlideUp .3s cubic-bezier(.22,1,.36,1);
+}
+@keyframes modalSlideUp{
+  from{opacity:0;transform:translateY(40px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+.hire-modal-close{
+  position:absolute;top:20px;right:20px;
+  width:34px;height:34px;border-radius:8px;
+  border:1px solid var(--slate700);background:none;
+  color:var(--slate400);cursor:pointer;font-size:.9rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s;
+}
+.hire-modal-close:hover{border-color:var(--cyan);color:var(--cyan)}
+.hire-modal-header{margin-bottom:28px}
+.hire-modal-label{
+  font-size:.6rem;letter-spacing:.28em;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:8px;
+}
+.hire-modal-title{
+  font-family:'Syne',sans-serif;font-size:clamp(1.2rem,3vw,1.7rem);
+  font-weight:800;color:#fff;
+}
+/* Modal form grid rows */
+.hire-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.hire-group{margin-bottom:14px}
+.hire-group:last-of-type{margin-bottom:0}
+/* Reuse existing form-label / form-input / form-textarea styles */
+.hire-select{
+  width:100%;background:var(--bg2);border:1px solid var(--slate700);
+  border-radius:10px;padding:13px 16px;font-size:.75rem;color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  transition:border-color .2s,box-shadow .2s;outline:none;
+  appearance:none;cursor:pointer;
+}
+.hire-select:focus{border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.2)}
+.hire-select option{background:var(--bg2)}
+.hire-err{
+  font-size:.62rem;color:#f87171;margin-top:6px;
+  display:none;align-items:center;gap:5px;
+}
+.hire-btn-row{display:flex;gap:12px;margin-top:20px}
+.hire-cancel-btn{
+  flex:1;padding:15px;border-radius:12px;
+  border:1px solid var(--slate700);background:none;
+  color:var(--slate400);font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;cursor:pointer;
+  transition:border-color .2s,color .2s;
+}
+.hire-cancel-btn:hover{border-color:var(--slate500);color:#fff}
+.hire-submit-btn{
+  flex:2;padding:15px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--cyan-dim),var(--cyan));
+  color:#020617;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;cursor:pointer;
+  transition:box-shadow .3s,transform .15s,opacity .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.hire-submit-btn:hover{box-shadow:0 0 28px var(--cyan-glow);transform:translateY(-1px)}
+.hire-submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+@media(max-width:600px){
+  .hire-row{grid-template-columns:1fr}
+  .hire-modal-box{padding:28px 20px}
+}
+
+/* ── TOAST NOTIFICATION ── */
+#toastContainer{
+  position:fixed;bottom:32px;right:32px;z-index:9000;
+  display:flex;flex-direction:column;gap:10px;pointer-events:none;
+}
+.toast-notif{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 20px;border-radius:12px;
+  font-size:.7rem;font-weight:600;letter-spacing:.05em;
+  pointer-events:auto;min-width:260px;
+  animation:toastIn .35s cubic-bezier(.22,1,.36,1);
+}
+.toast-notif.success{
+  background:rgba(15,23,42,.97);
+  border:1px solid rgba(34,211,238,.35);color:var(--cyan);
+  box-shadow:0 0 28px rgba(34,211,238,.12);
+}
+.toast-notif.error{
+  background:rgba(15,23,42,.97);
+  border:1px solid rgba(248,113,113,.35);color:#f87171;
+  box-shadow:0 0 28px rgba(248,113,113,.1);
+}
+.toast-notif.fadeout{animation:toastOut .4s forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(12px) scale(.95)}}
+
+/* ── THANK YOU POPUP ── */
+#thankYouPopup{
+  display:none;position:fixed;inset:0;z-index:6000;
+  background:rgba(2,6,23,.9);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+}
+#thankYouPopup.open{display:flex}
+.thankyou-box{
+  background:linear-gradient(135deg,rgba(15,23,42,.98),rgba(30,27,75,.5));
+  border:1px solid rgba(34,211,238,.25);border-radius:20px;
+  padding:56px 48px;text-align:center;max-width:460px;width:90%;
+  animation:modalSlideUp .35s cubic-bezier(.22,1,.36,1);
+  box-shadow:0 0 80px rgba(34,211,238,.08);
+}
+.thankyou-icon{font-size:3rem;margin-bottom:16px;filter:drop-shadow(0 0 20px var(--cyan))}
+.thankyou-title{
+  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;
+  color:#fff;margin-bottom:10px;
+}
+.thankyou-msg{font-size:.75rem;color:var(--slate400);line-height:1.8;margin-bottom:28px}
+.thankyou-close{
+  padding:12px 32px;border-radius:10px;border:1px solid var(--cyan);
+  background:none;color:var(--cyan);font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:background .2s,box-shadow .2s;
+}
+.thankyou-close:hover{background:rgba(34,211,238,.1);box-shadow:0 0 20px var(--cyan-glow)}
 </style>
 </head>
 <body>
@@ -668,7 +835,7 @@ footer{
     <button class="nav-link" onclick="scrollTo('skills')">Skills</button>
     <button class="nav-link" onclick="scrollTo('education')">Education</button>
     <button class="nav-link" onclick="scrollTo('contact')">Contact</button>
-    <button class="nav-cta" onclick="scrollTo('contact')">Hire Me</button>
+    <button class="nav-cta" onclick="openHireModal()">Hire Me</button>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -701,8 +868,8 @@ footer{
         <span class="p">algorithmically elegant</span>—because the best solutions live at the intersection of both worlds.
       </p>
       <div class="hero-btns">
-        <button class="btn-primary" onclick="scrollTo('contact')">⚡ Initialize Contact</button>
-        <button class="btn-outline" onclick="scrollTo('experience')">&lt;/&gt; View My Stack</button>
+        <button class="btn-primary" onclick="initializeContact()">⚡ Initialize Contact</button>
+        <button class="btn-outline" onclick="viewMyStack()">&lt;/&gt; View My Stack</button>
       </div>
       <div class="hero-stats">
         <div>
@@ -725,9 +892,14 @@ footer{
       <div class="avatar-ring3"></div>
       <div class="avatar-frame">
         <div class="avatar-inner">
-          <div class="avatar-icon">⚡</div>
-          <div class="avatar-name">Diviyanshu Mishra</div>
-          <div class="avatar-role">Eng. → SOFTWARE</div>
+          <!-- Default: lightning icon (fades out on hover) -->
+          <div class="avatar-default">
+            <div class="avatar-icon">⚡</div>
+            <div class="avatar-name">Diviyanshu Mishra</div>
+            <div class="avatar-role">Eng. → SOFTWARE</div>
+          </div>
+          <!-- Hover: profile photo (fades in on hover) -->
+          <div class="avatar-photo" role="img" aria-label="Diviyanshu Mishra profile photo"></div>
         </div>
       </div>
       <div class="badge badge-1">
@@ -831,8 +1003,6 @@ footer{
         </div>
       </div>
 
-      <!-- Job 2 -->
-      
 <!-- SKILLS -->
 <section id="skills" class="section-pad">
   <div class="container">
@@ -841,7 +1011,7 @@ footer{
     <div class="sec-line purple anim" data-delay="2"></div>
 
     <div class="skills-legend anim" data-delay="3">
-      <div class="legend-item"><div class="legend-dot cyan"></div>Electrical Domain</div>
+      <div class="legend-item"><div class="legend-dot cyan"></div>Core</div>
       <div class="legend-item"><div class="legend-dot purple"></div>Software Domain</div>
     </div>
 
@@ -1033,7 +1203,7 @@ footer{
             <div class="contact-ico cyan">📧</div>
             <div>
               <div class="contact-info-label">Email</div>
-              <div class="contact-info-val">divyanshmishra55432@email.com</div>
+              <div class="contact-info-val">divyanshmishra55432@gmail.com</div>
             </div>
           </div>
           <div class="contact-item">
@@ -1104,6 +1274,122 @@ footer{
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════
+     HIRE ME MODAL
+     ══════════════════════════════════════════ -->
+<div id="hireModal" role="dialog" aria-modal="true" aria-labelledby="hireModalTitle">
+  <div class="hire-modal-box">
+    <button class="hire-modal-close" onclick="closeHireModal()" aria-label="Close">✕</button>
+
+    <div class="hire-modal-header">
+      <p class="hire-modal-label">◆ Recruitment Protocol</p>
+      <h2 class="hire-modal-title" id="hireModalTitle">Initiate Hire Sequence</h2>
+    </div>
+
+    <form id="hireForm" novalidate>
+
+      <!-- Row 1: Company + Recruiter Name -->
+      <div class="hire-row">
+        <div>
+          <label class="form-label" for="hCompany">Company Name <span style="color:#f87171">*</span></label>
+          <input class="form-input" id="hCompany" type="text" placeholder="Acme Corp"/>
+          <div class="hire-err" id="errCompany">⚠ Required</div>
+        </div>
+        <div>
+          <label class="form-label" for="hRecruiter">Recruiter Name <span style="color:#f87171">*</span></label>
+          <input class="form-input" id="hRecruiter" type="text" placeholder="Jane Smith"/>
+          <div class="hire-err" id="errRecruiter">⚠ Required</div>
+        </div>
+      </div>
+
+      <!-- Row 2: Email + Role -->
+      <div class="hire-row">
+        <div>
+          <label class="form-label" for="hEmail">Recruiter Email <span style="color:#f87171">*</span></label>
+          <input class="form-input" id="hEmail" type="email" placeholder="jane@company.com"/>
+          <div class="hire-err" id="errEmail">⚠ Valid email required</div>
+        </div>
+        <div>
+          <label class="form-label" for="hRole">Offered Role <span style="color:#f87171">*</span></label>
+          <input class="form-input" id="hRole" type="text" placeholder="Frontend Engineer"/>
+          <div class="hire-err" id="errRole">⚠ Required</div>
+        </div>
+      </div>
+
+      <!-- Row 3: Employment Type + Joining Date -->
+      <div class="hire-row">
+        <div>
+          <label class="form-label" for="hType">Employment Type <span style="color:#f87171">*</span></label>
+          <select class="hire-select" id="hType">
+            <option value="" disabled selected>Select type…</option>
+            <option value="Full-time">Full-time</option>
+            <option value="Internship">Internship</option>
+            <option value="Contract">Contract</option>
+            <option value="Freelance">Freelance</option>
+          </select>
+          <div class="hire-err" id="errType">⚠ Required</div>
+        </div>
+        <div>
+          <label class="form-label" for="hDate">Expected Joining Date</label>
+          <input class="form-input" id="hDate" type="date" style="color-scheme:dark"/>
+        </div>
+      </div>
+
+      <!-- Salary Range -->
+      <div class="hire-group">
+        <label class="form-label">Salary Range</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <input class="form-input" id="hSalaryMin" type="text" placeholder="Min (e.g. ₹8,00,000)"/>
+          <input class="form-input" id="hSalaryMax" type="text" placeholder="Max (e.g. ₹15,00,000)"/>
+        </div>
+      </div>
+
+      <!-- Required Skills -->
+      <div class="hire-group">
+        <label class="form-label" for="hSkills">Required Skills <span style="color:#f87171">*</span></label>
+        <textarea class="form-textarea" id="hSkills" rows="2" placeholder="Java, Python, React, SQL…"></textarea>
+        <div class="hire-err" id="errSkills">⚠ Required</div>
+      </div>
+
+      <!-- Job Description -->
+      <div class="hire-group">
+        <label class="form-label" for="hJD">Job Description <span style="color:#f87171">*</span></label>
+        <textarea class="form-textarea" id="hJD" rows="4" placeholder="Describe the role, responsibilities, and team…"></textarea>
+        <div class="hire-err" id="errJD">⚠ Required</div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="hire-btn-row">
+        <button type="button" class="hire-cancel-btn" onclick="closeHireModal()">Cancel</button>
+        <button type="submit" class="hire-submit-btn" id="hireSubmitBtn">
+          <span>🚀</span>
+          <span id="hireSubmitText">Send Transmission</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     THANK YOU POPUP (after hire form submit)
+     ══════════════════════════════════════════ -->
+<div id="thankYouPopup" role="dialog" aria-modal="true">
+  <div class="thankyou-box">
+    <div class="thankyou-icon">⚡</div>
+    <div class="thankyou-title">Transmission Received!</div>
+    <div class="thankyou-msg">
+      Thank you for the opportunity.<br>Your hiring request has been received.<br>I will review and contact you shortly.
+    </div>
+    <button class="thankyou-close" onclick="closeThankYou()">Close Channel</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TOAST CONTAINER
+     ══════════════════════════════════════════ -->
+<div id="toastContainer"></div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">
@@ -1118,7 +1404,7 @@ footer{
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── CURSOR ── */
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursor-ring');
@@ -1229,14 +1515,25 @@ function handleDownload(){
   const btn=document.getElementById('powerBtn');
   const status=document.getElementById('resumeStatus');
   const txt=document.getElementById('powerText');
+
+  // Visual feedback
   btn.classList.add('on');
   txt.textContent='Downloading...';
   status.textContent='● TRANSMISSION INITIATED...';
+
+  // Trigger actual file download
   setTimeout(()=>{
-    status.textContent='✓ DOWNLOAD COMPLETE — Check your folder.';
+    const link=document.createElement('a');
+    link.href='/resume.pdf';
+    link.download='Diviyanshu_Mishra_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    status.textContent='✓ DOWNLOAD COMPLETE — Check your downloads folder.';
     txt.textContent='Downloaded!';
-    // In production: window.open('resume.pdf','_blank');
-  },1800);
+  },800);
+
+  // Reset button after 4s
   setTimeout(()=>{
     btn.classList.remove('on');
     txt.textContent='Engage Download';
@@ -1246,28 +1543,186 @@ function handleDownload(){
 
 /* ── CONTACT FORM ── */
 function handleSend(){
-  const name=document.getElementById('fname').value.trim();
-  const email=document.getElementById('femail').value.trim();
-  const msg=document.getElementById('fmessage').value.trim();
-  const err=document.getElementById('formError');
+  const name    = document.getElementById('fname').value.trim();
+  const email   = document.getElementById('femail').value.trim();
+  const subject = document.getElementById('fsubject').value.trim();
+  const msg     = document.getElementById('fmessage').value.trim();
+  const err     = document.getElementById('formError');
 
-  if(!name||!email||!msg){
+  if(!name || !email || !msg){
     err.style.display='flex';
     return;
   }
   err.style.display='none';
 
-  const btn=document.querySelector('.send-btn');
-  const txt=document.getElementById('sendText');
+  const btn = document.querySelector('.send-btn');
+  const txt = document.getElementById('sendText');
   btn.style.opacity='.7';
+  btn.style.pointerEvents='none';
   txt.textContent='Transmitting...';
 
-  setTimeout(()=>{
+  // Send via EmailJS
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_CONTACT_TEMPLATE_ID', {
+    from_name:    name,
+    from_email:   email,
+    subject:      subject || 'Portfolio Inquiry',
+    message:      msg,
+    to_email:     'divyanshmishra55432@gmail.com',
+  })
+  .then(()=>{
+    // Show existing success UI
     document.getElementById('contactForm').style.display='none';
-    const succ=document.getElementById('formSuccess');
-    succ.style.display='flex';
-  },1800);
+    document.getElementById('formSuccess').style.display='flex';
+    // Reset after 5s
+    setTimeout(()=>{
+      document.getElementById('contactForm').style.display='block';
+      document.getElementById('formSuccess').style.display='none';
+      document.getElementById('fname').value='';
+      document.getElementById('femail').value='';
+      document.getElementById('fsubject').value='';
+      document.getElementById('fmessage').value='';
+      btn.style.opacity='1';
+      btn.style.pointerEvents='auto';
+      txt.textContent='Send Transmission';
+    },5000);
+  })
+  .catch(()=>{
+    btn.style.opacity='1';
+    btn.style.pointerEvents='auto';
+    txt.textContent='Send Transmission';
+    showToast('Transmission failed. Check your connection and try again.','error');
+  });
 }
+/* ══════════════════════════════════════════
+   FEATURE ADDITIONS — NEW FUNCTIONS
+   ══════════════════════════════════════════ */
+
+/* ── 1. HIRE ME MODAL ── */
+function openHireModal(){
+  document.getElementById('hireModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  // Focus first input for accessibility
+  setTimeout(()=>document.getElementById('hCompany').focus(),100);
+}
+function closeHireModal(){
+  document.getElementById('hireModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+// Close modal on overlay click
+document.getElementById('hireModal').addEventListener('click',function(e){
+  if(e.target===this) closeHireModal();
+});
+// Close modal on Escape
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeHireModal();
+    closeThankYou();
+  }
+});
+
+/* ── HIRE FORM SUBMIT ── */
+document.getElementById('hireForm').addEventListener('submit',function(e){
+  e.preventDefault();
+
+  // Validate
+  const fields=[
+    {id:'hCompany',   errId:'errCompany',  test:v=>v.trim()},
+    {id:'hRecruiter', errId:'errRecruiter',test:v=>v.trim()},
+    {id:'hEmail',     errId:'errEmail',    test:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},
+    {id:'hRole',      errId:'errRole',     test:v=>v.trim()},
+    {id:'hType',      errId:'errType',     test:v=>v},
+    {id:'hSkills',    errId:'errSkills',   test:v=>v.trim()},
+    {id:'hJD',        errId:'errJD',       test:v=>v.trim()},
+  ];
+
+  let valid=true;
+  fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    const errEl=document.getElementById(f.errId);
+    if(!f.test(el.value)){
+      errEl.style.display='flex';
+      valid=false;
+    } else {
+      errEl.style.display='none';
+    }
+  });
+  if(!valid) return;
+
+  // Show loading state
+  const btn=document.getElementById('hireSubmitBtn');
+  const txt=document.getElementById('hireSubmitText');
+  btn.disabled=true;
+  txt.textContent='Transmitting...';
+
+  // Build template params
+  const params={
+    company_name:    document.getElementById('hCompany').value.trim(),
+    recruiter_name:  document.getElementById('hRecruiter').value.trim(),
+    recruiter_email: document.getElementById('hEmail').value.trim(),
+    offered_role:    document.getElementById('hRole').value.trim(),
+    employment_type: document.getElementById('hType').value,
+    joining_date:    document.getElementById('hDate').value || 'Not specified',
+    salary_min:      document.getElementById('hSalaryMin').value.trim() || 'Not specified',
+    salary_max:      document.getElementById('hSalaryMax').value.trim() || 'Not specified',
+    required_skills: document.getElementById('hSkills').value.trim(),
+    job_description: document.getElementById('hJD').value.trim(),
+    to_email:        'divyanshmishra55432@gmail.com',
+  };
+
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_HIRE_TEMPLATE_ID', params)
+  .then(()=>{
+    // Reset form
+    document.getElementById('hireForm').reset();
+    document.querySelectorAll('.hire-err').forEach(el=>el.style.display='none');
+    // Close modal, show thank you
+    closeHireModal();
+    setTimeout(()=>{
+      document.getElementById('thankYouPopup').classList.add('open');
+    },200);
+  })
+  .catch(()=>{
+    showToast('Transmission failed. Please try again.','error');
+  })
+  .finally(()=>{
+    btn.disabled=false;
+    txt.textContent='Send Transmission';
+  });
+});
+
+/* ── 2. THANK YOU POPUP ── */
+function closeThankYou(){
+  document.getElementById('thankYouPopup').classList.remove('open');
+}
+document.getElementById('thankYouPopup').addEventListener('click',function(e){
+  if(e.target===this) closeThankYou();
+});
+
+/* ── 3. TOAST NOTIFICATION ── */
+function showToast(message, type='success', duration=4500){
+  const container=document.getElementById('toastContainer');
+  const toast=document.createElement('div');
+  const icon=type==='success'?'📡':'⚠';
+  toast.className=`toast-notif ${type}`;
+  toast.innerHTML=`<span>${icon}</span><span>${message}</span>`;
+  container.appendChild(toast);
+  setTimeout(()=>{
+    toast.classList.add('fadeout');
+    toast.addEventListener('animationend',()=>toast.remove());
+  },duration);
+}
+
+/* ── 4. INITIALIZE CONTACT — mailto ── */
+function initializeContact(){
+  const subject=encodeURIComponent('Portfolio Inquiry');
+  const body=encodeURIComponent('Hello Diviyanshu, I would like to discuss an opportunity with you.');
+  window.location.href=`mailto:divyanshmishra55432@gmail.com?subject=${subject}&body=${body}`;
+}
+
+/* ── 5. VIEW MY STACK — GitHub ── */
+function viewMyStack(){
+  window.open('https://github.com/mdivyanshu32','_blank','noopener,noreferrer');
+}
+
 </script>
 </body>
 </html>
